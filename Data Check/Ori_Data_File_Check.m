@@ -3,10 +3,10 @@ close all
 clear all
 clc
 format long g; 
-fid = fopen('Ori_Data\151113.txt');
+fid = fopen('Ori_Data\CR1_RFID_2015_12_15_10_25_37.txt');
 Info = textscan(fid, '%f %s %s %d %f %f');
 fclose(fid);
-1
+
 % Extract the data
 Time_Stamp=Info{1}-Info{1}(1);
 IP_Address=Info{2};
