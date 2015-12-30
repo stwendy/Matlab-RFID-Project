@@ -3,7 +3,8 @@ close all
 clear all
 clc
 format long g; 
-fid = fopen('Ori_Data\CR1_RFID_2015_12_15_10_25_37.txt');
+fid = fopen('Ori_Data\151207 and 151209
+.txt');
 Info = textscan(fid, '%f %s %s %d %f %f');
 fclose(fid);
 

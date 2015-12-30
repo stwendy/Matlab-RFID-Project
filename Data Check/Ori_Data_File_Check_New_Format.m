@@ -4,7 +4,7 @@ clear all
 clc
 
 %% 
-fid = fopen('Ori_Data\RFID_12-20-2015_18-00-59.txt');
+fid = fopen('Ori_Data\RFID_12-29-2015_08-36-58.txt');
 Info = textscan(fid, '%s %d %s %f %f %f %f','delimiter',',');
 fclose(fid);
 
