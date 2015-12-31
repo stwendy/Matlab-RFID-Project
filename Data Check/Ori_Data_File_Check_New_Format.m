@@ -4,7 +4,11 @@ clear all
 clc
 
 %% 
-fid = fopen('Ori_Data\RFID_12-29-2015_08-36-58.txt');
+dir='C:\Users\Xinyu Li\Google Drive\R01 RFID project\AIM1\Kinect Data\RFID\';
+file='151230.txt';
+filename=strcat(dir,file);
+
+fid = fopen(filename);
 Info = textscan(fid, '%s %d %s %f %f %f %f','delimiter',',');
 fclose(fid);
 
