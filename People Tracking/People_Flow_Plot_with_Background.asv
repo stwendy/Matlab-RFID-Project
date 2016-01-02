@@ -1,6 +1,6 @@
 %% Author Xinyu Li
 % The script is used to plot location of people recorded by RFID system in
-% code room 1 dynamically.
+% code room 1 dynamically. with height view background
 
 %% 
 clear all
@@ -9,7 +9,7 @@ clc
 
 %% Load file and establish timeline
 dir='C:\Users\Xinyu Li\Google Drive\R01 RFID project\AIM1\Kinect Data\Position\';
-file='12-18-2015_17-16-16.txt';
+file='151218.txt';
 filename=strcat(dir,file);
 fprintf('Now working on file: %s \n',filename);
 
@@ -60,8 +60,11 @@ for t=1:timeMax
 end
 
 % Generate Frames and use differnt color for different ID
+
+load('Background.mat');
 for t=1:timeMax
    figureToPlot=figure(1);
+   imshow(BG);
    hold on
    
    % Reset the unused colors
@@ -74,8 +77,8 @@ for t=1:timeMax
        end
    end
    
-   rectangle('Position',[-100 205 130 70],'FaceColor','y');
-   axis([minX,maxX,minY,maxY]);
+%    rectangle('Position',[-100 205 130 70],'FaceColor','y');
+%    axis([minX,maxX,minY,maxY]);
    indexP=find(peopleLocation(t,:,1));
    for p=1:length(indexP)
        % find a usable color if there is no color assigned to the people
@@ -87,6 +90,8 @@ for t=1:timeMax
        % Plot figure with given color
        colorIndex=find(colorForPeople==indexP(p));
        cmd=strcat('o',colorMap(colorIndex));
+       xtmp=450-peopleLocation(t,indexP(p),1);
+       y
        plot(peopleLocation(t,indexP(p),1),peopleLocation(t,indexP(p),2),cmd,'MarkerFaceColor',colorMap(colorIndex),'MarkerSize',10);
        axis([minX,maxX,minY,maxY]);
    end

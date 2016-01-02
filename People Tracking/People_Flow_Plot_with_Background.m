@@ -1,6 +1,6 @@
 %% Author Xinyu Li
 % The script is used to plot location of people recorded by RFID system in
-% code room 1 dynamically.
+% code room 1 dynamically. with height view background
 
 %% 
 clear all
@@ -9,7 +9,7 @@ clc
 
 %% Load file and establish timeline
 dir='C:\Users\Xinyu Li\Google Drive\R01 RFID project\AIM1\Kinect Data\Position\';
-file='12-18-2015_17-16-16.txt';
+file='151213.txt';
 filename=strcat(dir,file);
 fprintf('Now working on file: %s \n',filename);
 
@@ -32,8 +32,8 @@ timeMax=max(timeInSecond);
 % maxX=max(xCoordinate);
 % minY=min(yCoordinate);
 % maxY=max(yCoordinate);
-minX=-350;
-maxX=200;
+minX=-50;
+maxX=650;
 minY=0;
 maxY=500;
 
@@ -45,7 +45,7 @@ motionVideo = VideoWriter('C:\Users\Xinyu Li\Desktop\Test.avi');
 open(motionVideo);
 
 % setupp color for people
-colorMap=['c','m','k','r','g','b','y'];
+colorMap=['c','m','y','r','g','b','y'];
 colorForPeople=zeros(1,7);
 
 % Generate people's location in single second
@@ -60,8 +60,11 @@ for t=1:timeMax
 end
 
 % Generate Frames and use differnt color for different ID
+
+load('Background.mat');
 for t=1:timeMax
    figureToPlot=figure(1);
+   imshow(BG);
    hold on
    
    % Reset the unused colors
@@ -74,9 +77,10 @@ for t=1:timeMax
        end
    end
    
-   rectangle('Position',[-100 205 130 70],'FaceColor','y');
-   axis([minX,maxX,minY,maxY]);
+%    rectangle('Position',[-100 205 130 70],'FaceColor','y');
+%    axis([minX,maxX,minY,maxY]);
    indexP=find(peopleLocation(t,:,1));
+   axis([minX,maxX,minY,maxY]);
    for p=1:length(indexP)
        % find a usable color if there is no color assigned to the people
        if(isempty(find(colorForPeople==indexP(p))))
@@ -87,7 +91,9 @@ for t=1:timeMax
        % Plot figure with given color
        colorIndex=find(colorForPeople==indexP(p));
        cmd=strcat('o',colorMap(colorIndex));
-       plot(peopleLocation(t,indexP(p),1),peopleLocation(t,indexP(p),2),cmd,'MarkerFaceColor',colorMap(colorIndex),'MarkerSize',10);
+       xtmp=150-peopleLocation(t,indexP(p),1);
+       ytmp=abs(450-peopleLocation(t,indexP(p),2));
+       plot(xtmp,ytmp,cmd,'MarkerFaceColor',colorMap(colorIndex),'MarkerSize',10);
        axis([minX,maxX,minY,maxY]);
    end
    
