@@ -1,5 +1,5 @@
 %% fuction to convert time into seconds
-function timeInSecond=time2Second(time)
+function [startTime,timeInSecond]=time2Second(time)
     timeInSecond=zeros(length(time),1);
 
     strStartTime=time{1};

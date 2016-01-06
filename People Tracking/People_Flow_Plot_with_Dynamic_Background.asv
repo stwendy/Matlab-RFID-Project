@@ -8,9 +8,9 @@ close all
 clc
 
 %% Load file and establish timeline
-dir='C:\Users\Xinyu Li\Google Drive\R01 RFID project\AIM1\Kinect Data\Position\';
-file='151218.txt';
-filename=strcat(dir,file);
+dirctory='C:\Users\Xinyu Li\Google Drive\Data\';
+file='1-5-2016_17-39-08.txt';
+filename=strcat(dirctory,file);
 fprintf('Now working on file: %s \n',filename);
 
 fid = fopen(filename);
@@ -23,17 +23,25 @@ xCoordinate=info{3};
 yCoordinate=info{4};
 
 peopleID=str2Double(id);
-timeInSecond=time2Second(time)+1;
+[positionStartTime,timeInSecond]=time2Second(time);
+timeInSecond=timeInSecond+1;
 uniqueID=unique(peopleID);
 
+% load background directory
+bgImages=dir('C:\Users\Xinyu Li\Google Drive\Data\heightview_1-5-2016_17-39-08\*.png');
+% calculate the first time for background
+bgStartTime=getBGStartTime(bgImages);
+timeDiff=bgStartTime-positionStartTime;
+% Update the background with following interval
+updateCoefficient=timeDiff;
 %% Generate Motion Video
 timeMax=max(timeInSecond);
 % minX=min(xCoordinate);
 % maxX=max(xCoordinate);
 % minY=min(yCoordinate);
 % maxY=max(yCoordinate);
-minX=-350;
-maxX=200;
+minX=-50;
+maxX=650;
 minY=0;
 maxY=500;
 
@@ -45,7 +53,7 @@ motionVideo = VideoWriter('C:\Users\Xinyu Li\Desktop\Test.avi');
 open(motionVideo);
 
 % setupp color for people
-colorMap=['c','m','k','r','g','b','y'];
+colorMap=['c','m','w','y','r','g','b'];
 colorForPeople=zeros(1,7);
 
 % Generate people's location in single second
@@ -61,11 +69,25 @@ end
 
 % Generate Frames and use differnt color for different ID
 
-load('Background.mat');
+count=1;
+% load('Background.mat');
+tmpBG=imread(strcat('C:\Users\Xinyu Li\Google Drive\Data\heightview_1-5-2016_17-39-08\',bgImages(count).name));
 for t=1:timeMax
-   figureToPlot=figure(1);
-   imshow(BG);
-   hold on
+
+   if (t-updateCoefficient==10) 
+       count=count+1;
+       updateCoefficient=t;
+       tmpBG=imread(strcat('C:\Users\Xinyu Li\Google Drive\Data\heightview_1-5-2016_17-39-08\',bgImages(count).name));
+       figureToPlot=figure(1);
+       BG=flipud(fliplr(tmpBG));
+       imshow(BG(1:450,251:800));
+       hold on
+   else
+       BG=flipud(fliplr(tmpBG));
+       figureToPlot=figure(1);
+       imshow(BG(1:450,251:800));
+       hold on
+   end
    
    % Reset the unused colors
    if (t>1)
@@ -80,6 +102,7 @@ for t=1:timeMax
 %    rectangle('Position',[-100 205 130 70],'FaceColor','y');
 %    axis([minX,maxX,minY,maxY]);
    indexP=find(peopleLocation(t,:,1));
+   axis([minX,maxX,minY,maxY]);
    for p=1:length(indexP)
        % find a usable color if there is no color assigned to the people
        if(isempty(find(colorForPeople==indexP(p))))
@@ -90,9 +113,9 @@ for t=1:timeMax
        % Plot figure with given color
        colorIndex=find(colorForPeople==indexP(p));
        cmd=strcat('o',colorMap(colorIndex));
-       xtmp=450-peopleLocation(t,indexP(p),1);
-       y
-       plot(peopleLocation(t,indexP(p),1),peopleLocation(t,indexP(p),2),cmd,'MarkerFaceColor',colorMap(colorIndex),'MarkerSize',10);
+       xtmp=150-peopleLocation(t,indexP(p),1);
+       ytmp=abs(450-peopleLocation(t,indexP(p),2));
+       plot(xtmp,ytmp,cmd,'MarkerFaceColor',colorMap(colorIndex),'MarkerSize',10);
        axis([minX,maxX,minY,maxY]);
    end
    
