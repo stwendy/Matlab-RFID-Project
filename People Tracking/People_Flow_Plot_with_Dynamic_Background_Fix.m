@@ -72,6 +72,7 @@ end
 count=1;
 % load('Background.mat');
 tmpBG=imread(strcat('C:\Users\Xinyu Li\Google Drive\Data\heightview_1-5-2016_17-39-08\',bgImages(count).name));
+fixedBG=imread('C:\Users\Xinyu Li\Google Drive\Data\BG.png');
 tmpClearBG=flipud(fliplr(tmpBG));
 clearBG=tmpClearBG(1:450,251:800);
 for t=1:timeMax
@@ -80,15 +81,18 @@ for t=1:timeMax
        count=count+1;
        updateCoefficient=t;
        tmpBG=imread(strcat('C:\Users\Xinyu Li\Google Drive\Data\heightview_1-5-2016_17-39-08\',bgImages(count).name));
-       figureToPlot=figure(1);
-       BG=flipud(fliplr(tmpBG));
-       imshow(BG(1:450,251:800));
-       hold on
+%        figureToPlot=figure(1);
+       tmpBG=flipud(fliplr(tmpBG));
+       BG=tmpBG(1:450,251:800);
+%        imshow(BG(1:450,251:800));
+%        hold on
    else
-       BG=flipud(fliplr(tmpBG));
-       figureToPlot=figure(1);
-       imshow(BG(1:450,251:800));
-       hold on
+       tmpBG=imread(strcat('C:\Users\Xinyu Li\Google Drive\Data\heightview_1-5-2016_17-39-08\',bgImages(count).name));
+       tmpBG=flipud(fliplr(tmpBG));
+%        figureToPlot=figure(1);
+       BG=tmpBG(1:450,251:800);
+%        imshow(BG(1:450,251:800));
+%        hold on
    end
    
    % Reset the unused colors
@@ -101,6 +105,24 @@ for t=1:timeMax
        end
    end
    
+   % update background and remove people movement
+   indexP=find(peopleLocation(t,:,1));
+   axis([minX,maxX,minY,maxY]);
+   for p=1:length(indexP)
+       xtmp=200-peopleLocation(t,indexP(p),1);
+       ytmp=abs(450-peopleLocation(t,indexP(p),2));
+       
+       boundaryL=floor(max(1,xtmp-35)); % to left 35 pixels
+       boundaryR=ceil(min(size(BG,2),xtmp+35)); % to left 35 pixels
+       boundaryU=floor(max(1,ytmp-50)); % to up 50 pixels
+       boundaryD=ceil(min(size(BG,1),ytmp+30)); % to down 30 pixels
+       
+       BG(boundaryU:boundaryD,boundaryL:boundaryU)=clearBG(boundaryU:boundaryD,boundaryL:boundaryU);
+   end
+   figureToPlot=figure(1);
+   imshow(BG);
+   hold on
+
    % Plot dots in the mask
    indexP=find(peopleLocation(t,:,1));
    axis([minX,maxX,minY,maxY]);
