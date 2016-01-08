@@ -72,27 +72,30 @@ end
 count=1;
 % load('Background.mat');
 tmpBG=imread(strcat('C:\Users\Xinyu Li\Google Drive\Data\heightview_1-5-2016_17-39-08\',bgImages(count).name));
-fixedBG=imread('C:\Users\Xinyu Li\Google Drive\Data\BG.png');
-tmpClearBG=flipud(fliplr(tmpBG));
+fixedBG=imread('C:\Users\Xinyu Li\Google Drive\Data\BBGG.png');
+tmpClearBG=flipud(fliplr(fixedBG));
 clearBG=tmpClearBG(1:450,251:800);
+isFrameUpdated=0;
 for t=1:timeMax
 
-   if (t-updateCoefficient==10) 
+   if (t-updateCoefficient==56) 
        count=count+1;
+       if (count>length(bgImages))
+           break;
+       end
+       
        updateCoefficient=t;
        tmpBG=imread(strcat('C:\Users\Xinyu Li\Google Drive\Data\heightview_1-5-2016_17-39-08\',bgImages(count).name));
-%        figureToPlot=figure(1);
        tmpBG=flipud(fliplr(tmpBG));
        BG=tmpBG(1:450,251:800);
-%        imshow(BG(1:450,251:800));
-%        hold on
-   else
+       isFrameUpdated=0;
+   elseif (isFrameUpdated==0)
        tmpBG=imread(strcat('C:\Users\Xinyu Li\Google Drive\Data\heightview_1-5-2016_17-39-08\',bgImages(count).name));
        tmpBG=flipud(fliplr(tmpBG));
-%        figureToPlot=figure(1);
        BG=tmpBG(1:450,251:800);
-%        imshow(BG(1:450,251:800));
-%        hold on
+       isFrameUpdated=1;
+   else
+       
    end
    
    % Reset the unused colors
@@ -112,15 +115,16 @@ for t=1:timeMax
        xtmp=200-peopleLocation(t,indexP(p),1);
        ytmp=abs(450-peopleLocation(t,indexP(p),2));
        
-       boundaryL=floor(max(1,xtmp-35)); % to left 35 pixels
-       boundaryR=ceil(min(size(BG,2),xtmp+35)); % to left 35 pixels
-       boundaryU=floor(max(1,ytmp-50)); % to up 50 pixels
-       boundaryD=ceil(min(size(BG,1),ytmp+30)); % to down 30 pixels
+       boundaryL=floor(max(1,xtmp-25)); % to left 35 pixels
+       boundaryR=ceil(min(size(BG,2),xtmp+25)); % to left 35 pixels
+       boundaryU=floor(max(1,ytmp-30)); % to up 50 pixels
+       boundaryD=ceil(min(size(BG,1),ytmp+20)); % to down 50 pixels
        
-       BG(boundaryU:boundaryD,boundaryL:boundaryU)=clearBG(boundaryU:boundaryD,boundaryL:boundaryU);
+       BG(boundaryU:boundaryD,boundaryL:boundaryR)=clearBG(boundaryU:boundaryD,boundaryL:boundaryR);
    end
    figureToPlot=figure(1);
    imshow(BG);
+%    axis([minX,maxX,minY,maxY]);
    hold on
 
    % Plot dots in the mask

@@ -8,8 +8,8 @@ close all
 clc
 
 %% Load file and establish timeline
-dirctory='C:\Users\Xinyu Li\Google Drive\Data\';
-file='1-5-2016_17-39-08.txt';
+dirctory='C:\Users\Xinyu Li\Google Drive\Data\Lab Test\';
+file='1-6-2016_16-48-09.txt';
 filename=strcat(dirctory,file);
 fprintf('Now working on file: %s \n',filename);
 
@@ -28,7 +28,7 @@ timeInSecond=timeInSecond+1;
 uniqueID=unique(peopleID);
 
 % load background directory
-bgImages=dir('C:\Users\Xinyu Li\Google Drive\Data\heightview_1-5-2016_17-39-08\*.png');
+bgImages=dir('C:\Users\Xinyu Li\Google Drive\Data\Lab Test\heightview_1-6-2016_16-48-09\*.png');
 % calculate the first time for background
 bgStartTime=getBGStartTime(bgImages);
 timeDiff=bgStartTime-positionStartTime;
@@ -71,15 +71,19 @@ end
 
 count=1;
 % load('Background.mat');
-tmpBG=imread(strcat('C:\Users\Xinyu Li\Google Drive\Data\heightview_1-5-2016_17-39-08\',bgImages(count).name));
+tmpBG=imread(strcat('C:\Users\Xinyu Li\Google Drive\Data\Lab Test\heightview_1-6-2016_16-48-09\',bgImages(count).name));
 tmpClearBG=flipud(fliplr(tmpBG));
 clearBG=tmpClearBG(1:450,251:800);
 for t=1:timeMax
 
-   if (t-updateCoefficient==10) 
+   if (t-updateCoefficient==56) 
        count=count+1;
+       if (count>length(bgImages))
+           break;
+       end
+       
        updateCoefficient=t;
-       tmpBG=imread(strcat('C:\Users\Xinyu Li\Google Drive\Data\heightview_1-5-2016_17-39-08\',bgImages(count).name));
+       tmpBG=imread(strcat('C:\Users\Xinyu Li\Google Drive\Data\Lab Test\heightview_1-6-2016_16-48-09\',bgImages(count).name));
        figureToPlot=figure(1);
        BG=flipud(fliplr(tmpBG));
        imshow(BG(1:450,251:800));

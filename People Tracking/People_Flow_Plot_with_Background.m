@@ -8,8 +8,8 @@ close all
 clc
 
 %% Load file and establish timeline
-dirctory='C:\Users\Xinyu Li\Google Drive\R01 RFID project\AIM1\Kinect Data\Position\';
-file='151213.txt';
+dirctory='C:\Users\Xinyu Li\Google Drive\Data\Lab Test\';
+file='1-6-2016_16-48-09.txt';
 filename=strcat(dirctory,file);
 fprintf('Now working on file: %s \n',filename);
 
@@ -28,7 +28,7 @@ timeInSecond=timeInSecond+1;
 uniqueID=unique(peopleID);
 
 % load background directory
-bgImages=dir('C:\Users\Xinyu Li\Google Drive\R01 RFID project\AIM1\Kinect Data\1-3-2016_21-16-55\*.png');
+bgImages=dir('C:\Users\Xinyu Li\Google Drive\Data\Lab Test\heightview_1-6-2016_16-48-09\*.png');
 % calculate the first time for background
 bgStartTime=getBGStartTime(bgImages);
 timeDiff=bgStartTime-positionStartTime;
