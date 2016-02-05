@@ -5,7 +5,7 @@ clc
 
 %% 
 dir='C:\Users\Xinyu Li\Google Drive\R01 RFID project\AIM1\Kinect Data\RFID\';
-file='160104.txt';
+file='160111 and 160112 (Possibly).txt';
 filename=strcat(dir,file);
 
 fid = fopen(filename);
