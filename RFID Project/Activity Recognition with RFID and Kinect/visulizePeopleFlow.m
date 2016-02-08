@@ -1,15 +1,21 @@
 %% 
 % this function is used to visulize flow  distribution wtih recorde psition
-% files every 30 seconds
+% files every step seconds
 clear all
 close all
 clc
 
 %%
-caseNum='151231';
+dirName='C:\Users\Xinyu Li\Google Drive\R01 RFID project\AIM1\AIM 1 Output\New System\';
+files=dir(fullfile(dirName,'*.xlsx'));
+nn=3;
+caseNum=files(nn).name(12:length(files(nn).name)-5);
+
 positionFilename=strcat('C:\Users\Xinyu Li\Google Drive\R01 RFID project\AIM1\Kinect Data\Position\',caseNum,'.txt');
 loadName=strcat('C:\Users\Xinyu Li\Google Drive\R01 RFID project\AIM1\AIM 1 Output\New System\Converted Data\positionStatisticsHeatmap.mat');
 load(strcat('C:\Users\Xinyu Li\Google Drive\R01 RFID project\AIM1\AIM 1 Output\New System\Converted Data\',caseNum,'_AIM3.mat'));
+load(strcat('C:\Users\Xinyu Li\Google Drive\R01 RFID project\AIM1\AIM 1 Output\New System\Converted Data\offset.mat'));
+
 load(loadName);
 fid = fopen(positionFilename);
 info = textscan(fid, '%s %s %f %f ','delimiter',',');
@@ -21,11 +27,10 @@ xCoordinate=ceil(info{3}+300);
 yCoordinate=ceil(info{4});
 peopleID=str2Double(id);
 
-syncOffset=0;
-positionTime=time2Second(time,syncOffset);
+positionTime=time2Second(time,syncOffset(nn));
 
 %% visulize every 1 minutes
-step=30;
+step=60;
 time=0;
 count=1;
 positionHeatmap=zeros(600,600,ceil(max(positionTime)/step)+1);
@@ -71,19 +76,23 @@ end
 
 %% make prediciton
 for i=1:7
-    coorelationTime(i,:)=smooth(coorelationTime(i,:),10);
+    coorelationTime(i,:)=smooth(coorelationTime(i,:),5);
 end
 
-prediction=zeros(size(coorelationTime));
-for i=1:size(prediction,2)
+duration=min(size(processedAIM3,2),max(positionTime));
+prediction=zeros(size(coorelationTime,1),(size(coorelationTime,2)-1)*step);
+for i=1:size(coorelationTime,2)-1
     [~,maxTmp]=max(coorelationTime(:,i));
-    prediction(maxTmp,i)=1;
+    prediction(maxTmp,(i-1)*step+1:i*step)=1;  
 end
 
 figure
 subplot(311)
-imagesc(processedAIM3);
+imagesc(processedAIM3(:,1:duration));
 subplot(312)
 imagesc(coorelationTime);
 subplot(313)
-imagesc(prediction);
+imagesc(prediction(:,1:duration));
+
+%% Evaluation
+
