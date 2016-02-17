@@ -25,7 +25,7 @@ clc
 
 for f=1:length(files)
     fileName=strcat(dirName,files(f).name);
-    caseNum=files(f).name(12:length(files(f).name)-5);
+    caseNum=files(f).name(length(files(f).name)-10:length(files(f).name)-5);
     fprintf('Processing case %s ...\n',caseNum);
     
     [~,~,Temp] =xlsread(fileName);
@@ -68,44 +68,44 @@ for f=1:length(files)
     save(saveName,'processedAIM3');
 
     % processing AIM2 Data
-    processedAIM2=zeros(length(ActivityList),timeMax);
-    for i=1:size(AIM2,2)
-        % get the key code
-        [token,remain] = strtok(AIM2{i,3}, '-');
-        [key,remian] = strtok(remain, '-');
-        idx = find(strcmp([ActivityList{:}], key));
-        [index,~] = find(strcmp(ActivityList,key));
-        
-        % get time
-        starttmp=AIM2{i,1};
-        endtmp=AIM2{i,2};
-        processedAIM2(index,starttmp:endtmp)=1; 
-    end
-    saveName=strcat('C:\Users\Xinyu Li\Google Drive\R01 RFID project\AIM1\AIM 1 Output\New System\Converted Data\',caseNum,'_AIM2.mat');
-    save(saveName,'processedAIM2');
-    
-    % processing AIM1 Data
-    processedAIM1=zeros(length(ObjectList),timeMax);
-    for i=1:size(AIM1,2)
-        % get the key code
-        key=AIM1{i,3};
-        index=find(strncmp(ObjectList, key, 3));
-        
-        % get time
-        starttmp=AIM1{i,1};
-        endtmp=AIM1{i,2};
-        
-        % get the object use type
-        if (strcmp(AIM1{i,4},' In Use'))
-            processedAIM1(index,starttmp:endtmp)=2; 
-        elseif (strcmp(AIM1{i,4},' In Motion') && strcmp(AIM1{i,8},'Task Related'))
-            processedAIM1(index,starttmp:endtmp)=1; 
-        else
-            processedAIM1(index,starttmp:endtmp)=-1; 
-        end
-    end
-    saveName=strcat('C:\Users\Xinyu Li\Google Drive\R01 RFID project\AIM1\AIM 1 Output\New System\Converted Data\',caseNum,'_AIM1.mat');
-    save(saveName,'processedAIM1');
+%     processedAIM2=zeros(length(ActivityList),timeMax);
+%     for i=1:size(AIM2,2)
+%         % get the key code
+%         [token,remain] = strtok(AIM2{i,3}, '-');
+%         [key,remian] = strtok(remain, '-');
+%         idx = find(strcmp([ActivityList{:}], key));
+%         [index,~] = find(strcmp(ActivityList,key));
+%         
+%         % get time
+%         starttmp=AIM2{i,1};
+%         endtmp=AIM2{i,2};
+%         processedAIM2(index,starttmp:endtmp)=1; 
+%     end
+%     saveName=strcat('C:\Users\Xinyu Li\Google Drive\R01 RFID project\AIM1\AIM 1 Output\New System\Converted Data\',caseNum,'_AIM2.mat');
+%     save(saveName,'processedAIM2');
+%     
+%     % processing AIM1 Data
+%     processedAIM1=zeros(length(ObjectList),timeMax);
+%     for i=1:size(AIM1,2)
+%         % get the key code
+%         key=AIM1{i,3};
+%         index=find(strncmp(ObjectList, key, 3));
+%         
+%         % get time
+%         starttmp=AIM1{i,1};
+%         endtmp=AIM1{i,2};
+%         
+%         % get the object use type
+%         if (strcmp(AIM1{i,4},' In Use'))
+%             processedAIM1(index,starttmp:endtmp)=2; 
+%         elseif (strcmp(AIM1{i,4},' In Motion') && strcmp(AIM1{i,8},'Task Related'))
+%             processedAIM1(index,starttmp:endtmp)=1; 
+%         else
+%             processedAIM1(index,starttmp:endtmp)=-1; 
+%         end
+%     end
+%     saveName=strcat('C:\Users\Xinyu Li\Google Drive\R01 RFID project\AIM1\AIM 1 Output\New System\Converted Data\',caseNum,'_AIM1.mat');
+%     save(saveName,'processedAIM1');
 end
 
 %%

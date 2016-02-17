@@ -8,7 +8,7 @@ clc
 %%
 dirName='C:\Users\Xinyu Li\Google Drive\R01 RFID project\AIM1\AIM 1 Output\New System\';
 files=dir(fullfile(dirName,'*.xlsx'));
-nn=3;
+nn=2;
 caseNum=files(nn).name(12:length(files(nn).name)-5);
 
 positionFilename=strcat('C:\Users\Xinyu Li\Google Drive\R01 RFID project\AIM1\Kinect Data\Position\',caseNum,'.txt');

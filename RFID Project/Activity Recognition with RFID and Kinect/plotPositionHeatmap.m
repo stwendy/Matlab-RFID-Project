@@ -15,7 +15,7 @@ numberOfID=zeros(length(files),7);
     
 for f=1:length(files)
     fileName=strcat(dirName,files(f).name);
-    caseNum=files(f).name(12:length(files(f).name)-5);
+    caseNum=files(f).name(length(files(f).name)-10:length(files(f).name)-5);
     fprintf('Processing file %s ...\n',caseNum);
     loadName=strcat('C:\Users\Xinyu Li\Google Drive\R01 RFID project\AIM1\AIM 1 Output\New System\Converted Data\',caseNum,'_AIM3.mat');
     load(loadName);
@@ -88,10 +88,10 @@ end
 
 %% plot distribution
 medicalPhase={'Pre-Arrival','Pt arrival','Pre-Primary','Primary','Secondary','Post-Secondary','Pt departure'};
-for i=1:size(positionStatisticsHeatmap,3)
+for i=1:size(positionStatisticsHeatmap,3)-1
     figure(1)
-    subplot(3,3,i);
-    temp=imresize(positionStatisticsHeatmap(:,:,i),[60,60]);
+    subplot(2,3,i);
+    temp=imresize(positionStatisticsHeatmap(:,:,i),[200,200]);
     temp=imgaussfilt(temp,4);
     normTmp = temp - min(temp(:));
     temp = normTmp ./ max(normTmp(:));
