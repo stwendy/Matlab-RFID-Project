@@ -101,30 +101,21 @@ for f=1:length(files)
             processedAIM1(index,starttmp:endtmp)=2; 
             strZone=AIM1{i,7};
             zonetmp=str2double(strZone(length(strZone)));
-            zoneAIM1(index,starttmp:endtmp)=zonetmp;
+            zoneAIM1(index,starttmp:endtmp)
         elseif (strcmp(AIM1{i,4},' In Motion') && strcmp(AIM1{i,8},'Task Related'))
             processedAIM1(index,starttmp:endtmp)=1; 
-            strZone=AIM1{i,7};
-            zonetmp=str2double(strZone(length(strZone)));
-            zoneAIM1(index,starttmp:endtmp)=zonetmp;
         else
             processedAIM1(index,starttmp:endtmp)=-1; 
-            strZone=AIM1{i,7};
-            zonetmp=str2double(strZone(length(strZone)));
-            zoneAIM1(index,starttmp:endtmp)=zonetmp;
         end
     end
     saveName=strcat('C:\Users\Xinyu Li\Google Drive\R01 RFID project\AIM1\AIM 1 Output\New System\Converted Data\',caseNum,'_AIM1.mat');
     save(saveName,'processedAIM1');
-    saveName=strcat('C:\Users\Xinyu Li\Google Drive\R01 RFID project\AIM1\AIM 1 Output\New System\Converted Data\',caseNum,'_ZoneAIM1.mat');
-    save(saveName,'zoneAIM1');
     
     % processing AIM1 location data
     
     clear AIM1;
     clear AIM2;
     clear AIM3;
-    clear zoneAIM1;
 end
 
 %%
