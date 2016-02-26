@@ -91,7 +91,7 @@ medicalPhase={'Pre-Arrival','Pt arrival','Pre-Primary','Primary','Secondary','Po
 for i=1:size(positionStatisticsHeatmap,3)-1
     figure(1)
     subplot(2,3,i);
-    temp=imresize(positionStatisticsHeatmap(:,:,i),[300,300]);
+    temp=imresize(positionStatisticsHeatmap(:,:,i),[30,30]);
     temp=imgaussfilt(temp,4);
     normTmp = temp - min(temp(:));
     temp = normTmp ./ max(normTmp(:));

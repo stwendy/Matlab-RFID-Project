@@ -8,7 +8,8 @@ clc
 %%
 dirName='C:\Users\Xinyu Li\Google Drive\R01 RFID project\AIM1\AIM 1 Output\New System\';
 files=dir(fullfile(dirName,'*.xlsx'));
-nn=2;
+nn=1;
+side=100;
 caseNum=files(nn).name(12:length(files(nn).name)-5);
 
 positionFilename=strcat('C:\Users\Xinyu Li\Google Drive\R01 RFID project\AIM1\Kinect Data\Position\',caseNum,'.txt');
@@ -30,7 +31,7 @@ peopleID=str2Double(id);
 positionTime=time2Second(time,syncOffset(nn));
 
 %% visulize every 1 minutes
-step=60;
+step=30;
 time=0;
 count=1;
 positionHeatmap=zeros(600,600,ceil(max(positionTime)/step)+1);
@@ -47,7 +48,7 @@ while (time<max(positionTime))
     end
     
     % pre-process
-    temp=imresize(positionHeatmap(:,:,count),[60,60]);
+    temp=imresize(positionHeatmap(:,:,count),[side,side]);
     temp=imgaussfilt(temp./step,4);
     normTmp = temp - min(temp(:));
     temp = normTmp ./ max(normTmp(:));
@@ -55,7 +56,7 @@ while (time<max(positionTime))
     
     % Calculate the similiarty of people flow
     for l=1:size(positionStatisticsHeatmap,3)
-        temp_positionStatisticsHeatmap=flipud(imresize(positionStatisticsHeatmap(:,:,l),[60,60]));
+        temp_positionStatisticsHeatmap=flipud(imresize(positionStatisticsHeatmap(:,:,l),[side,side]));
         temp_positionStatisticsHeatmap=imgaussfilt(temp_positionStatisticsHeatmap,4);
         normTmp = temp_positionStatisticsHeatmap - min(temp_positionStatisticsHeatmap(:));
         temp_positionStatisticsHeatmap = normTmp ./ max(normTmp(:));
@@ -66,9 +67,9 @@ while (time<max(positionTime))
     figure(1)
     
     imagesc(temp);
-    ax = gca;
-    ax.XTickLabel = {'1','2','3','4','5','6'};
-    ax.YTickLabel = {'6','5','4','3','2','1'};
+%     ax = gca;
+%     ax.XTickLabel = {'1','2','3','4','5','6'};
+%     ax.YTickLabel = {'6','5','4','3','2','1'};
     
     count=count+1;
 end
