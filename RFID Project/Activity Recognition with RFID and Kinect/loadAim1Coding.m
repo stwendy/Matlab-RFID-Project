@@ -29,7 +29,7 @@ for f=1:length(files)
     fprintf('Processing case %s ...\n',caseNum);
     
     [~,~,Temp] =xlsread(fileName);
-    Temp(1,:)=[];
+%     Temp(1,:)=[];
     
     startTime=str2time(Temp(:,1));
     endTime=str2time(Temp(:,2));
