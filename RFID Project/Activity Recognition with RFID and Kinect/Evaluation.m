@@ -4,7 +4,7 @@ close all
 clc
 
 %%
-
+RR=[];
 GT=KK;
 %% Matrix 1 Accuracy
 % GT=phaseResult(:,1);
@@ -52,5 +52,5 @@ Markedness=PPV+NPV-1;
 [S,P,MCC];
 [Informedness,Markedness];
 
-RR(phase+1,:)=[Accuracy, Precision, Recall, FScore,Informedness,Markedness,MCC];
+RR=[RR;Accuracy, Precision, Recall, FScore,Informedness,Markedness,MCC];
 end
