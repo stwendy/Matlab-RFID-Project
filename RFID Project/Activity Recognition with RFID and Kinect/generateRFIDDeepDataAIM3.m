@@ -28,9 +28,8 @@ GT=processedAIM3;
 duration=min(size(GT,2),size(RSS,2));
 for i=1:duration
 %     dataTmp(i,:)=reshape(imresize(reshape(RSS(:,i,:),[size(RSS,1),size(RSS,3)]),[28,28]),[1,28*28]);
-    tt=reshape(RSS(:,i,:),[size(RSS,1),size(RSS,3)]);
-    ttRep=[tt(:,12:-1:7),tt,tt(:,6:-1:1)]';
-    temp=reshape(ttRep,[1,size(ttRep,1)*size(ttRep,2)]);
+    tt=reshape(RSS(:,i,:),[1,size(RSS,1)*size(RSS,3)]);
+    temp=tt;
     index=find (temp==-100);
         temp(index)=0;
     clear index
@@ -61,7 +60,11 @@ DD=[];
 for i=0:6
     index=find(data(:,1)==i);
         for ii=5:length(index)
-            DD=[DD;[i,reshape([data(index(ii)-4:index(ii),2:size(data,2))]',[1,5*(size(data,2)-1)])]];
+            Tmp=data(index(ii)-4:index(ii),2:size(data,2));
+            for obj=1:12
+                MM(obj,:,:)=reshape(Tmp(1:5,8*(obj-1)+1:8*obj),[1,5,8]);
+            end
+            DD=[DD;[i,reshape(MM,[1,12*8*5])]];
             fprintf('processing Label: %d, %d out of %d ...\n',i,ii,length(index));
         end
     clear index
@@ -71,7 +74,7 @@ DD(index,1)=DD(index,1)-1;
 clear index;
 
 DDD=[];
-for i=[0,2,3,4,5]
+for i=0:4
     index=find(DD(:,1)==i);
         ii=randperm(length(index));
         if (length(index)>=500)
@@ -92,17 +95,21 @@ clear index;
 
 count=0;
 for  i=0:4
-    count=count+1;
     figure(1)
-    subplot(2,3,count)
+
     index=find(DDD(:,1)==i);
         Temp=mean(DDD(index,2:size(DDD,2)));
-        imagesc([reshape(Temp,[24,40])]',[0,100]);
+        TT=reshape(Temp,[12,5,8]);
+        for channel=1:8
+            count=count+1;   
+            subplot(5,8,count)
+            imagesc(uint8(TT(:,:,channel)),[0,75]);
+        end
     clear index;
 end
 
-filename='data5secondwindows_40_24_AIM3_all.csv';
-csvwrite(filename,DD);
+filename='data5sec_12_5_8_AIM3_train.csv';
+csvwrite(filename,DDD);
 
 
 % filename='labelTest.csv';
